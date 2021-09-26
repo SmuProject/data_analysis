@@ -22,10 +22,7 @@ def item_rank():
             "champion_id",
             "win_or_lose",
             "lane",
-            "gold_earn",
-            "cs",
-            "kill",
-            "assist",
+            "win_cnt"
             "lose_cnt",
         ]
     )
@@ -162,6 +159,7 @@ def item_rank():
             elif w_or_l == "lose":
                 lose_cnt = tru.cnt
                 win_cnt = 0
+
             champ_id = itemtree.split("/")[2]
             champ_lane = itemtree.split("/")[3]
             item_1 = itemtree.split("/")[5]
@@ -188,19 +186,24 @@ def item_rank():
             # print(listlist)
             sql = "INSERT INTO item_rank(index ,champion_id, lane, item_1, item_2, item_3, play_champ_num) values( %s, %s, %s, %s, %s, %s, %s)"
 
-    df = (
-        df.groupby(["champion_id", "lane", "item_1", "item_2", "item_3"])
-        .agg({"win_cnt": "first", "lose_cnt": "last", "play_champ_num": "first"})
-        .reset_index()
-    )
+    df.to_csv("./df.testbefore2.csv")
+    # df = (
+    #     df.groupby(["champion_id", "lane", "item_1", "item_2", "item_3"])
+    #     .agg({"win_cnt": "first", "lose_cnt": "last", "play_champ_num": "first"})
+    #     .reset_index()
+    # )
+
+    df =
+
+
 
     df["win_rate"] = df.apply(get_win_rate, axis=1)
     df["pick_rate"] = df.apply(get_pick_rate, axis=1)
-    df = df.drop(["win_cnt", "lose_cnt", "play_champ_num"], axis=1)
+    #df = df.drop(["win_cnt", "lose_cnt", "play_champ_num"], axis=1)
     df = df.reset_index().rename(columns={"index": "index"})
 
-    # df.to_csv('./df_sample2-2.csv')
-    df.to_sql(name="item_rank", con=engine, if_exists="replace", index=False)
+    df.to_csv('./df_testtest2.csv')
+    #df.to_sql(name="item_rank", con=engine, if_exists="replace", index=False)
 
     con.close()
     conn.close()
